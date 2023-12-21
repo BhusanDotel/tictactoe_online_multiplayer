@@ -1,0 +1,65 @@
+.main-root-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.playground-root {
+  width: 450px;
+}
+.rows {
+  height: 150px;
+  width: 450px;
+}
+.first-row {
+  border-bottom: 1px solid black;
+  display: flex;
+}
+.second-row {
+  display: flex;
+}
+.third-row {
+  border-top: 1px solid black;
+  display: flex;
+}
+.cells {
+  height: 150px;
+  width: 150px;
+  cursor: pointer;
+  transition: 1s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.one-one {
+  border-right: 1px solid black;
+}
+.one-three {
+  border-left: 1px solid black;
+}
+.two-one {
+  border-right: 1px solid black;
+}
+.two-three {
+  border-left: 1px solid black;
+}
+.three-one {
+  border-right: 1px solid black;
+}
+.three-three {
+  border-left: 1px solid black;
+}
+img {
+  height: 100px;
+  width: 80px;
+  object-position: center;
+  object-fit: contain;
+}
+
+.line-container {
+  position: absolute;
+  top: 0;
+  z-index: -1;
+}
