@@ -1,0 +1,64 @@
+.room-main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(159, 159, 159);
+  height: 100vh;
+  padding: 100px;
+}
+.room-name-input-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.room-content-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 50px;
+}
+.room-buttons-container {
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  align-items: center;
+  border: 2px solid black;
+  background-color: rgb(75, 75, 75);
+  border-radius: 10px;
+  padding: 50px;
+}
+.room-create-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+}
+.join-room-code-join-div {
+  display: flex;
+  column-gap: 10px;
+}
+.room-code {
+  color: white;
+}
+.room-input {
+  width: 200px;
+  height: 30px;
+  outline: none;
+  border: 1px solid rgb(127, 127, 127);
+  border-radius: 10px;
+  padding-left: 10px;
+}
+.room-button {
+  height: 30px;
+  width: 100px;
+  outline: none;
+  border: 1px solid rgb(76, 76, 76);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.room-button:active {
+  transform: scale(0.9);
+}
+.disble-button {
+  cursor: not-allowed;
+}

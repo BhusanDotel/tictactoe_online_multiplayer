@@ -19,7 +19,7 @@ function Home() {
   const NavigateToCreateRoom = () => {
     setRedirectLocalPlay(true);
     setTimeout(() => {
-      navigate("/createroom");
+      navigate("/playonline");
     }, 700);
   };
 
@@ -30,13 +30,13 @@ function Home() {
           onClick={NavigateToLocalPlay}
           className="home-button localplay-button"
         >
-          Play Local with friend
+          Play Local
         </button>
         <button
           onClick={NavigateToCreateRoom}
           className="home-button create-room-button"
         >
-          Create room
+          Play Online
         </button>
       </div>
 
