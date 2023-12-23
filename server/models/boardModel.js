@@ -46,6 +46,14 @@ const boardSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  player1Score: {
+    type: Number,
+    default: 0,
+  },
+  player2Score: {
+    type: Number,
+    default: 0,
+  },
   turn: {
     type: String,
     required: false,

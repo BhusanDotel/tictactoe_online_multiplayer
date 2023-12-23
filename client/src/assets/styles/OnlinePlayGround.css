@@ -1,0 +1,40 @@
+.online-ground-main-container {
+  display: flex;
+  justify-content: space-around;
+  padding-left: 100px;
+  padding-right: 100px;
+  width: 100%;
+}
+.playground-buttons-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 100px;
+}
+.play-again-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.online-play-button {
+  color: white;
+  background-color: black;
+}
+.player-name-container {
+  height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.score-status {
+  font-size: 13px;
+}
+.myturn-boder {
+  background-color: rgb(0, 0, 0);
+  color: white;
+  width: 100px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

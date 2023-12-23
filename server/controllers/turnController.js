@@ -3,117 +3,125 @@ const boardData = require("../models/boardModel.js");
 const turn = async (req, res) => {
   try {
     if (req.body) {
-      const { a, b, roomcode } = req.body;
+      const { a, b, roomcode, name } = req.body;
       if (roomcode && a && b) {
         const roomExists = await boardData.findOne({ roomCode: roomcode });
         if (roomExists) {
-          let isOdd = false;
-          roomExists.clickcount = roomExists.clickcount + 1;
-          if (roomExists.clickcount < 10) {
-            if (roomExists.clickcount % 2 === 0) {
-              isOdd = false;
-            } else {
-              isOdd = true;
-            }
+          if (roomExists.turn === name) {
+            let isOdd = false;
+            roomExists.clickcount = roomExists.clickcount + 1;
+            if (roomExists.clickcount < 10) {
+              if (roomExists.clickcount % 2 === 0) {
+                isOdd = false;
+              } else {
+                isOdd = true;
+              }
 
-            const availableMatrix = roomExists.matrix;
-            const _matrix = [...availableMatrix];
-            _matrix[a - 1][b - 1] = isOdd ? 0 : 1;
-            roomExists.matrix = _matrix;
+              if (isOdd) {
+                roomExists.turn = roomExists.player2;
+              } else {
+                roomExists.turn = roomExists.player1;
+              }
 
-            const _a = a.toString();
-            const _b = b.toString();
-            const cellIndex = _a + _b;
+              const availableMatrix = roomExists.matrix;
+              const _matrix = [...availableMatrix];
+              _matrix[a - 1][b - 1] = isOdd ? 0 : 1;
+              roomExists.matrix = _matrix;
 
-            if (roomExists[cellIndex] === null) {
-              roomExists[cellIndex] = isOdd ? "circle" : "cross";
-            }
+              const _a = a.toString();
+              const _b = b.toString();
+              const cellIndex = _a + _b;
 
-            const matrix = roomExists.matrix;
+              if (roomExists[cellIndex] === null) {
+                roomExists[cellIndex] = isOdd ? "circle" : "cross";
+              }
 
-            let winLineCoordsInitials;
-            checkIfWin();
-            async function checkIfWin() {
-              function checkRowSums(matrix) {
-                for (let i = 0; i < matrix.length; i++) {
-                  const rowSum = matrix[i].reduce(
-                    (sum, element) => sum + element,
+              const matrix = roomExists.matrix;
+
+              let winLineCoordsInitials;
+              checkIfWin();
+              async function checkIfWin() {
+                function checkRowSums(matrix) {
+                  for (let i = 0; i < matrix.length; i++) {
+                    const rowSum = matrix[i].reduce(
+                      (sum, element) => sum + element,
+                      0
+                    );
+                    if (rowSum === 0 || rowSum === 3) {
+                      if (i + 1 === 1) {
+                        winLineCoordsInitials = "fr";
+                      } else if (i + 1 === 2) {
+                        winLineCoordsInitials = "sr";
+                      } else if (i + 1 === 3) {
+                        winLineCoordsInitials = "tr";
+                      }
+
+                      return true;
+                    }
+                  }
+                  return false;
+                }
+
+                function checkColumnSums(matrix) {
+                  for (let j = 0; j < matrix[0].length; j++) {
+                    const columnSum = matrix.reduce(
+                      (sum, row) => sum + row[j],
+                      0
+                    );
+                    if (columnSum === 0 || columnSum === 3) {
+                      if (j + 1 === 1) {
+                        winLineCoordsInitials = "fc";
+                      } else if (j + 1 === 2) {
+                        winLineCoordsInitials = "sc";
+                      } else if (j + 1 === 3) {
+                        winLineCoordsInitials = "tc";
+                      }
+
+                      return true;
+                    }
+                  }
+                  return false;
+                }
+
+                function checkDiagonalSums(matrix) {
+                  const diagonal1Sum = matrix.reduce(
+                    (sum, row, index) => sum + row[index],
                     0
                   );
-                  if (rowSum === 0 || rowSum === 3) {
-                    if (i + 1 === 1) {
-                      winLineCoordsInitials = "fr";
-                    } else if (i + 1 === 2) {
-                      winLineCoordsInitials = "sr";
-                    } else if (i + 1 === 3) {
-                      winLineCoordsInitials = "tr";
-                    }
-
-                    return true;
-                  }
-                }
-                return false;
-              }
-
-              function checkColumnSums(matrix) {
-                for (let j = 0; j < matrix[0].length; j++) {
-                  const columnSum = matrix.reduce(
-                    (sum, row) => sum + row[j],
+                  const diagonal2Sum = matrix.reduce(
+                    (sum, row, index) => sum + row[row.length - index - 1],
                     0
                   );
-                  if (columnSum === 0 || columnSum === 3) {
-                    if (j + 1 === 1) {
-                      winLineCoordsInitials = "fc";
-                    } else if (j + 1 === 2) {
-                      winLineCoordsInitials = "sc";
-                    } else if (j + 1 === 3) {
-                      winLineCoordsInitials = "tc";
-                    }
 
-                    return true;
+                  if (diagonal1Sum === 0 || diagonal1Sum === 3) {
+                    winLineCoordsInitials = "fd";
                   }
-                }
-                return false;
-              }
 
-              function checkDiagonalSums(matrix) {
-                const diagonal1Sum = matrix.reduce(
-                  (sum, row, index) => sum + row[index],
-                  0
-                );
-                const diagonal2Sum = matrix.reduce(
-                  (sum, row, index) => sum + row[row.length - index - 1],
-                  0
-                );
+                  if (diagonal2Sum === 0 || diagonal2Sum === 3) {
+                    winLineCoordsInitials = "sd";
+                  }
 
-                if (diagonal1Sum === 0 || diagonal1Sum === 3) {
-                  winLineCoordsInitials = "fd";
+                  return (
+                    diagonal1Sum === 0 ||
+                    diagonal1Sum === 3 ||
+                    diagonal2Sum === 0 ||
+                    diagonal2Sum === 3
+                  );
                 }
 
-                if (diagonal2Sum === 0 || diagonal2Sum === 3) {
-                  winLineCoordsInitials = "sd";
+                if (
+                  checkRowSums(matrix) ||
+                  checkColumnSums(matrix) ||
+                  checkDiagonalSums(matrix)
+                ) {
+                  roomExists.winCoordsInitials = winLineCoordsInitials;
                 }
-
-                return (
-                  diagonal1Sum === 0 ||
-                  diagonal1Sum === 3 ||
-                  diagonal2Sum === 0 ||
-                  diagonal2Sum === 3
-                );
               }
 
-              if (
-                checkRowSums(matrix) ||
-                checkColumnSums(matrix) ||
-                checkDiagonalSums(matrix)
-              ) {
-                roomExists.winCoordsInitials = winLineCoordsInitials;
-              }
+              await roomExists.save();
+
+              res.json("your turn registered");
             }
-
-            await roomExists.save();
-
-            res.json({ room: roomExists });
           }
         }
       }

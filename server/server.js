@@ -6,6 +6,8 @@ require("dotenv").config();
 
 const roomRoutes = require("./routes/roomRoutes");
 const turnRoutes = require("./routes/turnRoutes");
+const playAgainRoutes = require("./routes/playAgainRoutes");
+const roomInfoRoutes = require("./routes/roomInfoRoutes");
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,6 +24,8 @@ mongoose
 
 app.use("/api", turnRoutes);
 app.use("/api", roomRoutes);
+app.use("/api", playAgainRoutes);
+app.use("/api", roomInfoRoutes);
 
 app.listen(3000, () => {
   console.log("App listening on port 3000!");
