@@ -5,6 +5,18 @@ const boardSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  isfull: {
+    type: Boolean,
+    required: true,
+  },
+  clickcount: {
+    type: Number,
+    default: 0,
+  },
+  winCoordsInitials: {
+    type: String,
+    default: "",
+  },
 
   11: { type: String, default: null },
   12: { type: String, default: null },
@@ -31,6 +43,10 @@ const boardSchema = new mongoose.Schema({
     required: false,
   },
   player2: {
+    type: String,
+    required: false,
+  },
+  turn: {
     type: String,
     required: false,
   },

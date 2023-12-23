@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import axios from "axios";
@@ -6,14 +6,15 @@ import "../styles/Room.css";
 import "../styles/Transition.css";
 
 function Room() {
+  const _name = localStorage.getItem("name");
+  const _code = localStorage.getItem("name") || "";
   const navigate = useNavigate();
   const [redirectLocalPlay, setRedirectLocalPlay] = useState(false);
-  const [showRoomCreateWindow, setShowRoomCreateWindow] = useState(false);
   const [isJoinRoom, setJoinRoom] = useState(false);
   const [roomCodeIn, setRoomCodeIn] = useState(null);
   const [roomCodeGet, setRoomCodeGet] = useState(null);
   const [isCreating, setCreating] = useState(false);
-  const [name, setName] = useState("");
+  const [name, setName] = useState(_name);
   const transitionRef = useRef(null);
 
   const handleName = (e) => {
@@ -22,12 +23,14 @@ function Room() {
 
   const createRoom = () => {
     if (name) {
+      name !== _name ? localStorage.setItem("name", name) : "";
       setCreating(true);
       axios
         .post("http://localhost:3000/api/createroom", { name })
         .then((res) => {
           if (res.data) {
             setRoomCodeGet(res.data);
+            localStorage.setItem("roomCode", res.data);
             setCreating(false);
           }
         });
@@ -36,16 +39,20 @@ function Room() {
 
   const joinRoom = () => {
     if (name && roomCodeIn) {
+      name !== _name ? localStorage.setItem("name", name) : "";
       axios
         .post("http://localhost:3000/api/joinroom", { name, roomCodeIn })
         .then((res) => {
           if (res.data === "room is available") {
+            _code !== roomCodeIn
+              ? localStorage.setItem("roomCode", roomCodeIn)
+              : "";
             setRedirectLocalPlay(true);
             setTimeout(() => {
-              navigate("/playlocal");
+              navigate("/playonline");
             }, 700);
           } else {
-            alert("Couldn't find room ");
+            alert(res.data);
           }
         });
     }
@@ -67,12 +74,15 @@ function Room() {
       <div className="room-content-container">
         <div className="room-name-input-container">
           <input
+            value={name}
+            name="name"
             onChange={handleName}
             className="room-name-input room-input"
             type="text"
             placeholder="Enter name to play online"
           />
         </div>
+
         <div className="room-buttons-container">
           <div className="room-join-container">
             {!isJoinRoom && (

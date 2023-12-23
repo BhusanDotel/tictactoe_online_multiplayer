@@ -19,7 +19,7 @@ function Home() {
   const NavigateToCreateRoom = () => {
     setRedirectLocalPlay(true);
     setTimeout(() => {
-      navigate("/playonline");
+      navigate("/room");
     }, 700);
   };
 
