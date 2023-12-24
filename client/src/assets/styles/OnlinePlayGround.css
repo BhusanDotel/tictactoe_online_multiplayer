@@ -25,16 +25,22 @@
   justify-content: center;
   align-items: center;
 }
+.player-name {
+  width: 150px;
+}
 .score-status {
   font-size: 13px;
+}
+.name-and-score-div {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
 }
 .myturn-boder {
   background-color: rgb(0, 0, 0);
   color: white;
-  width: 100px;
   height: 50px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }

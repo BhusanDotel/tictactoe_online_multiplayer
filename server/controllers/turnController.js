@@ -4,7 +4,7 @@ const turn = async (req, res) => {
   try {
     if (req.body) {
       const { a, b, roomcode, name } = req.body;
-      if (roomcode && a && b) {
+      if (roomcode && a && b && name) {
         const roomExists = await boardData.findOne({ roomCode: roomcode });
         if (roomExists) {
           if (roomExists.turn === name) {

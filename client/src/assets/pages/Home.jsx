@@ -18,9 +18,7 @@ function Home() {
 
   const NavigateToCreateRoom = () => {
     setRedirectLocalPlay(true);
-    setTimeout(() => {
-      navigate("/room");
-    }, 700);
+    navigate("/room");
   };
 
   return (

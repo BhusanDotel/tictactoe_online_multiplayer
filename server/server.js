@@ -12,9 +12,9 @@ const roomInfoRoutes = require("./routes/roomInfoRoutes");
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-
+const mongoCloudURL = process.env.MDB_URL;
 mongoose
-  .connect(process.env.MDB_URL)
+  .connect("mongodb://localhost:27017/AaluCrossDB")
   .then(() => {
     console.log("Mongodb connected");
   })

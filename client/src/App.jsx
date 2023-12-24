@@ -11,7 +11,7 @@ function App() {
       <Route index element={<Home />} />
       <Route path="/playlocal" element={<LocalPlayGround />} />
       <Route path="/room" element={<Room />} />
-      <Route path="/playonline" element={<OnlinePlayGround />} />
+      <Route path="/playonline/:roomCodeIn" element={<OnlinePlayGround />} />
     </Routes>
   );
 }

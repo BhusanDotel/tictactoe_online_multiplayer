@@ -1,21 +1,13 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
+import React, { useState } from "react";
 import axios from "axios";
 import "../styles/Room.css";
-import "../styles/Transition.css";
 
 function Room() {
   const _name = localStorage.getItem("name");
-  const _code = localStorage.getItem("name") || "";
-  const navigate = useNavigate();
-  const [redirectLocalPlay, setRedirectLocalPlay] = useState(false);
-  const [isJoinRoom, setJoinRoom] = useState(false);
-  const [roomCodeIn, setRoomCodeIn] = useState(null);
-  const [roomCodeGet, setRoomCodeGet] = useState(null);
+  const [rooomURL, setRoomURL] = useState(null);
   const [isCreating, setCreating] = useState(false);
   const [name, setName] = useState(_name);
-  const transitionRef = useRef(null);
+  const [copied, setCopied] = useState(false);
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -29,7 +21,7 @@ function Room() {
         .post("http://localhost:3000/api/createroom", { name })
         .then((res) => {
           if (res.data) {
-            setRoomCodeGet(res.data);
+            setRoomURL(`http://localhost:5173/playonline/${res.data}`);
             localStorage.setItem("roomCode", res.data);
             setCreating(false);
           }
@@ -37,36 +29,15 @@ function Room() {
     }
   };
 
-  const joinRoom = () => {
-    if (name && roomCodeIn) {
-      name !== _name ? localStorage.setItem("name", name) : "";
-      axios
-        .post("http://localhost:3000/api/joinroom", { name, roomCodeIn })
-        .then((res) => {
-          if (res.data === "room is available") {
-            _code !== roomCodeIn
-              ? localStorage.setItem("roomCode", roomCodeIn)
-              : "";
-            setRedirectLocalPlay(true);
-            setTimeout(() => {
-              navigate("/playonline");
-            }, 700);
-          } else {
-            alert(res.data);
-          }
-        });
-    }
+  const handleCopyClick = async () => {
+    const textToCopy = document.getElementById("textToCopy").innerText;
+    await navigator.clipboard.writeText(textToCopy);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
   };
 
-  const cancelJoinRoom = () => {
-    setJoinRoom(false);
-  };
-  const toggleJoinRoom = () => {
-    setJoinRoom(!isJoinRoom);
-  };
-  const handleRoomCode = (e) => {
-    setRoomCodeIn(e.target.value);
-  };
   const doNothing = () => {};
 
   return (
@@ -84,45 +55,6 @@ function Room() {
         </div>
 
         <div className="room-buttons-container">
-          <div className="room-join-container">
-            {!isJoinRoom && (
-              <button
-                onClick={name ? toggleJoinRoom : doNothing}
-                className={`${
-                  name ? "room-button" : "room-button disble-button"
-                } `}
-              >
-                Join room
-              </button>
-            )}
-
-            {isJoinRoom && (
-              <div className="join-room-code-join-div">
-                <input
-                  onChange={name ? handleRoomCode : doNothing}
-                  className="room-code-inpu room-input"
-                  type="number"
-                  placeholder="Enter room code"
-                />
-                {roomCodeIn ? (
-                  <button
-                    onClick={name ? joinRoom : doNothing}
-                    className="room-button room-join-button"
-                  >
-                    Join
-                  </button>
-                ) : (
-                  <button
-                    onClick={name ? cancelJoinRoom : doNothing}
-                    className="room-button room-join-cancel-button"
-                  >
-                    Cancel
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-
           <div className="room-create-container">
             <button
               onClick={name ? createRoom : doNothing}
@@ -133,23 +65,22 @@ function Room() {
               Create room
             </button>
             {!isCreating ? (
-              roomCodeGet && <p className="room-code">{roomCodeGet}</p>
+              rooomURL && (
+                <div className="room-url-copy-container">
+                  <p id="textToCopy" className="room-code">
+                    {rooomURL}
+                  </p>
+                  <button onClick={handleCopyClick} className="copy-btn">
+                    {copied ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+              )
             ) : (
               <p className="room-code">creating room....</p>
             )}
           </div>
         </div>
       </div>
-
-      <CSSTransition
-        in={redirectLocalPlay}
-        timeout={500}
-        classNames="fade"
-        nodeRef={transitionRef}
-        unmountOnExit
-      >
-        <div className="localplay-transition" ref={transitionRef}></div>
-      </CSSTransition>
     </main>
   );
 }

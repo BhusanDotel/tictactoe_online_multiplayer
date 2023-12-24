@@ -11,11 +11,17 @@ const createRoom = (req, res) => {
           res.json("room already available");
           createRoom();
         } else {
+          const matrix = [
+            [100, 100, 100],
+            [100, 100, 100],
+            [100, 100, 100],
+          ];
           boardData.create({
             roomCode: randomNumber,
             isfull: false,
             player1: name,
             turn: name,
+            matrix: matrix,
           });
           res.json(randomNumber);
         }
@@ -28,25 +34,27 @@ const createRoom = (req, res) => {
 const joinRoom = async (req, res) => {
   if (req.body) {
     const { name, roomCodeIn } = req.body;
-    const roomExists = await boardData.findOne({ roomCode: roomCodeIn });
-    if (roomExists) {
-      if (roomExists.isfull === false) {
-        const matrix = [
-          [100, 100, 100],
-          [100, 100, 100],
-          [100, 100, 100],
-        ];
-        roomExists.isfull = true;
-        roomExists.roomCode = roomCodeIn;
-        roomExists.matrix = matrix;
-        roomExists.player2 = name;
-        await roomExists.save();
-        res.json("room is available");
+    if (name && roomCodeIn) {
+      const roomExists = await boardData.findOne({ roomCode: roomCodeIn });
+      if (roomExists) {
+        if (
+          roomExists.player1 === name ||
+          roomExists.player2 === name ||
+          roomExists.isfull === false
+        ) {
+          if (roomExists.player1 !== name) {
+            roomExists.player2 = name;
+            roomExists.isfull = true;
+          }
+          roomExists.roomCode = roomCodeIn;
+          await roomExists.save();
+          res.json("room is available");
+        } else {
+          res.json("room is full");
+        }
       } else {
-        res.json("room is full");
+        res.json("room not available");
       }
-    } else {
-      res.json("room not available");
     }
   }
 };
