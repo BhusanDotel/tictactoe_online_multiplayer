@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/Room.css";
+import io from "socket.io-client";
+
+const host = "http://localhost:3000";
+
+const socket = io.connect(host);
 
 function Room() {
   const _name = localStorage.getItem("name");
@@ -12,6 +17,15 @@ function Room() {
   const handleName = (e) => {
     setName(e.target.value);
   };
+
+  useEffect(() => {
+    socket.on("roomCode", (code) => {
+      const roomCode = localStorage.getItem("roomCode");
+      if (code === roomCode) {
+        window.location.href = `http://localhost:5173/playonline/${code}`;
+      }
+    });
+  }, [socket]);
 
   const createRoom = () => {
     if (name) {

@@ -3,6 +3,11 @@ import Line from "../components/Line";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/OnlinePlayGround.css";
 import axios from "axios";
+import io from "socket.io-client";
+
+const host = "http://localhost:3000";
+
+const socket = io.connect(host);
 
 function OnlinePlayGround() {
   let name = localStorage.getItem("name");
@@ -36,13 +41,14 @@ function OnlinePlayGround() {
     sd: "M430,10 L10,450",
   };
 
+  socket.emit("roomCode", roomCodeIn);
+
   useEffect(() => {
     async function checkRoomAvailable() {
       if (name && roomCodeIn) {
         axios
           .post("http://localhost:3000/api/joinroom", { name, roomCodeIn })
           .then((res) => {
-            console.log(res.data);
             if (res.data !== "room is available") {
               alert(res.data);
               navigate("/room");
@@ -78,6 +84,8 @@ function OnlinePlayGround() {
             }
             if (res.data.turn === name) {
               setMyTurn(true);
+            } else {
+              setMyTurn(false);
             }
 
             const _playersData = { ...playersData };
@@ -100,7 +108,13 @@ function OnlinePlayGround() {
     if (roomcode && name) {
       getPlayersData();
     }
-  }, [trigger, myName]);
+
+    socket.on("cellState", (data) => {
+      if (data) {
+        setTrigger(trigger + 1);
+      }
+    });
+  }, [trigger, myName, socket]);
 
   const handleCellClick = async (a, b) => {
     const roomcode = roomCodeIn;
@@ -114,6 +128,7 @@ function OnlinePlayGround() {
             }
           }
         });
+      await socket.emit("cellState", a.toString() + b.toString());
     }
   };
 
