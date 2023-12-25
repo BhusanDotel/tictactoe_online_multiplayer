@@ -1,7 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const http = require("http");
 const mongoose = require("mongoose");
+const initSocket = require("./SocketService");
 require("dotenv").config();
 
 const roomRoutes = require("./routes/roomRoutes");
@@ -13,8 +15,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 const mongoCloudURL = process.env.MDB_URL;
+const mongoLocal = "mongodb://localhost:27017/AaluCrossDB";
 mongoose
-  .connect("mongodb://localhost:27017/AaluCrossDB")
+  .connect(mongoCloudURL)
   .then(() => {
     console.log("Mongodb connected");
   })
@@ -27,6 +30,10 @@ app.use("/api", roomRoutes);
 app.use("/api", playAgainRoutes);
 app.use("/api", roomInfoRoutes);
 
-app.listen(3000, () => {
+const server = http.createServer(app);
+
+initSocket(server);
+
+server.listen(3000, () => {
   console.log("App listening on port 3000!");
 });
