@@ -10,7 +10,7 @@ const turn = async (req, res) => {
           if (roomExists.turn === name) {
             let isOdd = false;
             roomExists.clickcount = roomExists.clickcount + 1;
-            if (roomExists.clickcount < 10) {
+            if (roomExists.clickcount < 11) {
               if (roomExists.clickcount % 2 === 0) {
                 isOdd = false;
               } else {
@@ -115,6 +115,11 @@ const turn = async (req, res) => {
                   checkDiagonalSums(matrix)
                 ) {
                   roomExists.winCoordsInitials = winLineCoordsInitials;
+                  if (roomExists.turn !== roomExists.player1) {
+                    roomExists.player1Score = roomExists.player1Score + 1;
+                  } else {
+                    roomExists.player2Score = roomExists.player2Score + 1;
+                  }
                 }
               }
 

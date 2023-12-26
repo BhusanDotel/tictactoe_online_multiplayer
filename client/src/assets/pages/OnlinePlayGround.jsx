@@ -81,6 +81,8 @@ function OnlinePlayGround() {
             if (res.data.winCoordsInitials) {
               setWon(true);
               setWinLineCoords(res.data.winCoordsInitials);
+            } else {
+              setWon(false);
             }
             if (res.data.turn === name) {
               setMyTurn(true);
@@ -114,6 +116,12 @@ function OnlinePlayGround() {
         setTrigger(trigger + 1);
       }
     });
+
+    socket.on("playAgain", (data) => {
+      if (data) {
+        setTrigger(trigger + data);
+      }
+    });
   }, [trigger, myName, socket]);
 
   const handleCellClick = async (a, b) => {
@@ -135,7 +143,16 @@ function OnlinePlayGround() {
   const PlayAgain = async () => {
     const roomcode = roomCodeIn;
     if (roomcode && name) {
-      await axios.post("http://localhost:3000/api/playagain", { roomcode });
+      axios
+        .post("http://localhost:3000/api/playagain", {
+          roomcode,
+          name,
+        })
+        .then(async (res) => {
+          if (res.data) {
+            await socket.emit("playAgain", trigger);
+          }
+        });
     }
   };
 

@@ -54,9 +54,18 @@ const boardSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  gameStartTurn: {
+    type: String,
+    required: false,
+  },
   turn: {
     type: String,
     required: false,
+  },
+
+  playAgainVote: {
+    type: [String],
+    default: [],
   },
 });
 

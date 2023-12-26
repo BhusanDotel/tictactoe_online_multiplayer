@@ -21,6 +21,7 @@ const createRoom = (req, res) => {
             isfull: false,
             player1: name,
             turn: name,
+            gameStartTurn: name,
             matrix: matrix,
           });
           res.json(randomNumber);

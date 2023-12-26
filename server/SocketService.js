@@ -13,6 +13,10 @@ const initSocket = (httpServer) => {
       io.emit("roomCode", roomCode);
     });
 
+    socket.on("playAgain", (trigger) => {
+      io.emit("playAgain", trigger);
+    });
+
     socket.on("cellState", (data) => {
       io.emit("cellState", data);
     });
