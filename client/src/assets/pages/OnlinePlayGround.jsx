@@ -229,7 +229,12 @@ function OnlinePlayGround() {
           <div
             className={`name-and-score-div ${isMyTurn ? "myturn-boder" : ""}`}
           >
-            <h2 className="player-name">{playersData.player1}</h2>
+            <div className="player-name-id-container">
+              <h2 className="player-name">
+                {playersData.player1.split("#")[0]}
+              </h2>
+              <p className="hash-id">#{playersData.player1.split("#")[1]}</p>
+            </div>
             <p className="score-status">score:{playersData.player1Score}</p>
           </div>
         </div>
@@ -359,8 +364,13 @@ function OnlinePlayGround() {
           <div
             className={`name-and-score-div ${!isMyTurn ? "myturn-boder" : ""}`}
           >
-            <h2 className="player-name">{playersData.player2}</h2>
-            <p className="score-status">score:{playersData.player2Score}</p>
+            <div className="player-name-id-container">
+              <h2 className="player-name">
+                {playersData.player2.split("#")[0]}
+              </h2>
+              <p className="hash-id">#{playersData.player2.split("#")[1]}</p>
+            </div>
+            <p className="score-status">score:{playersData.player1Score}</p>
           </div>
         </div>
       </main>
