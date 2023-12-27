@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/Room.css";
+import { host } from "../utils/apiRoutes";
+import { myBaseURL } from "../utils/apiRoutes";
+import { createRoomRoute } from "../utils/apiRoutes";
 import io from "socket.io-client";
-
-const host = "http://localhost:3000";
 
 const socket = io.connect(host);
 
@@ -22,7 +23,7 @@ function Room() {
     socket.on("roomCode", (code) => {
       const roomCode = localStorage.getItem("roomCode");
       if (code === roomCode) {
-        window.location.href = `http://localhost:5173/playonline/${code}`;
+        window.location.href = `${myBaseURL}/playonline/${code}`;
       }
     });
   }, [socket]);
@@ -31,15 +32,13 @@ function Room() {
     if (name) {
       name !== _name ? localStorage.setItem("name", name) : "";
       setCreating(true);
-      axios
-        .post("http://localhost:3000/api/createroom", { name })
-        .then((res) => {
-          if (res.data) {
-            setRoomURL(`http://localhost:5173/playonline/${res.data}`);
-            localStorage.setItem("roomCode", res.data);
-            setCreating(false);
-          }
-        });
+      axios.post(createRoomRoute, { name }).then((res) => {
+        if (res.data) {
+          setRoomURL(`${myBaseURL}/playonline/${res.data}`);
+          localStorage.setItem("roomCode", res.data);
+          setCreating(false);
+        }
+      });
     }
   };
 

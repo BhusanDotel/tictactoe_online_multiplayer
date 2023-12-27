@@ -14,7 +14,7 @@ const initSocket = (httpServer) => {
     });
 
     socket.on("playAgain", (trigger) => {
-      io.emit("playAgain", trigger);
+      io.emit("playAgain", trigger + 1);
     });
 
     socket.on("cellState", (data) => {

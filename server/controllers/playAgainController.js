@@ -7,6 +7,26 @@ const playAgain = async (req, res) => {
       try {
         const room = await boardData.findOne({ roomCode: roomcode });
         if (room) {
+          if (room.playAgainVote.length === 0) {
+            if (!room.playAgainVote.includes(name)) {
+              room.playAgainVote.push(name);
+            }
+          }
+          await room.save();
+          res.json("play again registered");
+        }
+      } catch (error) {}
+    }
+  }
+};
+
+const allowPlayAgain = async (req, res) => {
+  if (req.body) {
+    const { roomcode, name } = req.body;
+    if (roomcode && name) {
+      try {
+        const room = await boardData.findOne({ roomCode: roomcode });
+        if (room) {
           if (!room.playAgainVote.includes(name)) {
             room.playAgainVote.push(name);
           }
@@ -48,6 +68,24 @@ const playAgain = async (req, res) => {
   }
 };
 
+const denyPlayagain = async (req, res) => {
+  if (req.body) {
+    const { roomcode, name } = req.body;
+    if (roomcode && name) {
+      try {
+        const room = await boardData.findOne({ roomCode: roomcode });
+        if (room) {
+          room.playAgainVote = [];
+          await room.save();
+          res.json("play again denied");
+        }
+      } catch (error) {}
+    }
+  }
+};
+
 module.exports = {
   playAgain,
+  allowPlayAgain,
+  denyPlayagain,
 };

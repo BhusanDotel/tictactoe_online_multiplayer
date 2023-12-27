@@ -2,10 +2,17 @@ import React, { useState, useEffect } from "react";
 import Line from "../components/Line";
 import { useNavigate, useParams } from "react-router-dom";
 import "../styles/OnlinePlayGround.css";
+import {
+  allowPlayagainRoute,
+  denyPlayagainRoute,
+  getRoomInfoRoute,
+  host,
+  joinRoomRoute,
+  playagainRoute,
+  turnDecidingRoute,
+} from "../utils/apiRoutes";
 import axios from "axios";
 import io from "socket.io-client";
-
-const host = "http://localhost:3000";
 
 const socket = io.connect(host);
 
@@ -28,6 +35,7 @@ function OnlinePlayGround() {
   const [cellState, setCellState] = useState({});
   const [myName, setMyname] = useState(name);
   const [isMyTurn, setMyTurn] = useState(false);
+  const [playAgainVote, setPlayAgainVote] = useState([]);
   const navigate = useNavigate();
 
   const lineCoords = {
@@ -46,14 +54,12 @@ function OnlinePlayGround() {
   useEffect(() => {
     async function checkRoomAvailable() {
       if (name && roomCodeIn) {
-        axios
-          .post("http://localhost:3000/api/joinroom", { name, roomCodeIn })
-          .then((res) => {
-            if (res.data !== "room is available") {
-              alert(res.data);
-              navigate("/room");
-            }
-          });
+        axios.post(joinRoomRoute, { name, roomCodeIn }).then((res) => {
+          if (res.data !== "room is available") {
+            alert(res.data);
+            navigate("/room");
+          }
+        });
       }
     }
 
@@ -63,49 +69,48 @@ function OnlinePlayGround() {
   useEffect(() => {
     const roomcode = roomCodeIn;
     async function getPlayersData() {
-      await axios
-        .post("http://localhost:3000/api/getroomInfo", { roomcode, name })
-        .then((res) => {
-          if (res.data) {
-            const _cellState = { ...cellState };
-            _cellState[11] = res.data[11];
-            _cellState[12] = res.data[12];
-            _cellState[13] = res.data[13];
-            _cellState[21] = res.data[21];
-            _cellState[22] = res.data[22];
-            _cellState[23] = res.data[23];
-            _cellState[31] = res.data[31];
-            _cellState[32] = res.data[32];
-            _cellState[33] = res.data[33];
-            setCellState(_cellState);
-            if (res.data.winCoordsInitials) {
-              setWon(true);
-              setWinLineCoords(res.data.winCoordsInitials);
-            } else {
-              setWon(false);
-            }
-            if (res.data.turn === name) {
-              setMyTurn(true);
-            } else {
-              setMyTurn(false);
-            }
-
-            const _playersData = { ...playersData };
-            if (name === res.data.player1) {
-              _playersData.player1 = name;
-              _playersData.player1Score = res.data.player1Score;
-              _playersData.player2 = res.data.player2;
-              _playersData.player2Score = res.data.player2Score;
-            } else {
-              _playersData.player1 = name;
-              _playersData.player1Score = res.data.player2Score;
-              _playersData.player2 = res.data.player1;
-              _playersData.player2Score = res.data.player1Score;
-            }
-
-            setPlayersData(_playersData);
+      await axios.post(getRoomInfoRoute, { roomcode, name }).then((res) => {
+        if (res.data) {
+          const _cellState = { ...cellState };
+          _cellState[11] = res.data[11];
+          _cellState[12] = res.data[12];
+          _cellState[13] = res.data[13];
+          _cellState[21] = res.data[21];
+          _cellState[22] = res.data[22];
+          _cellState[23] = res.data[23];
+          _cellState[31] = res.data[31];
+          _cellState[32] = res.data[32];
+          _cellState[33] = res.data[33];
+          setCellState(_cellState);
+          if (res.data.winCoordsInitials) {
+            setWon(true);
+            setWinLineCoords(res.data.winCoordsInitials);
+          } else {
+            setWon(false);
           }
-        });
+          if (res.data.turn === name) {
+            setMyTurn(true);
+          } else {
+            setMyTurn(false);
+          }
+          setPlayAgainVote(res.data.playAgainVote);
+
+          const _playersData = { ...playersData };
+          if (name === res.data.player1) {
+            _playersData.player1 = name;
+            _playersData.player1Score = res.data.player1Score;
+            _playersData.player2 = res.data.player2;
+            _playersData.player2Score = res.data.player2Score;
+          } else {
+            _playersData.player1 = name;
+            _playersData.player1Score = res.data.player2Score;
+            _playersData.player2 = res.data.player1;
+            _playersData.player2Score = res.data.player1Score;
+          }
+
+          setPlayersData(_playersData);
+        }
+      });
     }
     if (roomcode && name) {
       getPlayersData();
@@ -128,7 +133,7 @@ function OnlinePlayGround() {
     const roomcode = roomCodeIn;
     if (!isWon && a && b && roomcode && name) {
       await axios
-        .post("http://localhost:3000/api/turn", { a, b, roomcode, name })
+        .post(turnDecidingRoute, { a, b, roomcode, name })
         .then((res) => {
           if (res.data) {
             if (res.data === "your turn registered") {
@@ -144,7 +149,39 @@ function OnlinePlayGround() {
     const roomcode = roomCodeIn;
     if (roomcode && name) {
       axios
-        .post("http://localhost:3000/api/playagain", {
+        .post(playagainRoute, {
+          roomcode,
+          name,
+        })
+        .then(async (res) => {
+          if (res.data) {
+            await socket.emit("playAgain", trigger);
+          }
+        });
+    }
+  };
+
+  const allowPlayAgain = async () => {
+    const roomcode = roomCodeIn;
+    if (roomcode && name) {
+      axios
+        .post(allowPlayagainRoute, {
+          roomcode,
+          name,
+        })
+        .then(async (res) => {
+          if (res.data) {
+            await socket.emit("playAgain", trigger);
+          }
+        });
+    }
+  };
+
+  const denyPlayAgain = async () => {
+    const roomcode = roomCodeIn;
+    if (roomcode && name) {
+      axios
+        .post(denyPlayagainRoute, {
           roomcode,
           name,
         })
@@ -261,12 +298,25 @@ function OnlinePlayGround() {
             </div>
           </div>
           <div className=" play-again-container">
-            <button
-              onClick={PlayAgain}
-              className="room-button online-play-button"
-            >
-              Play Again
-            </button>
+            {(playAgainVote.length === 0 || playAgainVote.includes(myName)) && (
+              <button
+                onClick={PlayAgain}
+                className="room-button online-play-button"
+              >
+                Play Again
+              </button>
+            )}
+            {playAgainVote.length !== 0 && !playAgainVote.includes(myName) && (
+              <div className="play-again-accept-deny">
+                <p>Opponent wants to play again!</p>
+                <button className="btn-playagain" onClick={allowPlayAgain}>
+                  Allow
+                </button>
+                <button className="btn-playagain" onClick={denyPlayAgain}>
+                  Deny
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <div className="player2-container player-name-container">
