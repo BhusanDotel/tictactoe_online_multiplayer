@@ -62,3 +62,15 @@
 .btn-playagain:active {
   transform: scale(0.6);
 }
+.active-status {
+  height: 15px;
+  width: 15px;
+  margin-right: 10px;
+  border-radius: 100%;
+}
+.active-status-online {
+  background-color: green;
+}
+.active-status-offline {
+  background-color: red;
+}

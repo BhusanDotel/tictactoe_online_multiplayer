@@ -19,8 +19,13 @@ const socket = io.connect(host);
 function OnlinePlayGround() {
   let name = localStorage.getItem("name");
   if (!name) {
+    function generateRandomCode() {
+      const randomCode = Math.floor(Math.random() * 9000) + 1000;
+      return randomCode.toString();
+    }
+
     name = prompt("Please enter your name");
-    localStorage.setItem("name", name);
+    localStorage.setItem("name", `${name}#${generateRandomCode()}`);
   }
   const { roomCodeIn } = useParams();
   const [isWon, setWon] = useState(false);
@@ -36,6 +41,7 @@ function OnlinePlayGround() {
   const [myName, setMyname] = useState(name);
   const [isMyTurn, setMyTurn] = useState(false);
   const [playAgainVote, setPlayAgainVote] = useState([]);
+  const [activeUsers, setActiveUsers] = React.useState([]);
   const navigate = useNavigate();
 
   const lineCoords = {
@@ -129,6 +135,22 @@ function OnlinePlayGround() {
     });
   }, [trigger, myName, socket]);
 
+  useEffect(() => {
+    const activeUserInfo = { username: myName, roomCode: roomCodeIn };
+    socket.emit("activeUserInfo", activeUserInfo);
+    socket.on("activeUsers", (activeUser) => {
+      const _activeUser = [];
+      activeUser.forEach((item) => {
+        const code1 = parseInt(item.roomcode);
+        const code2 = parseInt(roomCodeIn);
+        if (code1 === code2) {
+          _activeUser.push(item.username);
+        }
+      });
+      setActiveUsers(_activeUser);
+    });
+  }, [socket]);
+
   const handleCellClick = async (a, b) => {
     const roomcode = roomCodeIn;
     if (!isWon && a && b && roomcode && name) {
@@ -197,6 +219,13 @@ function OnlinePlayGround() {
     <>
       <main className="online-ground-main-container">
         <div className="player1-container player-name-container">
+          <div
+            className={`active-status ${
+              activeUsers.includes(playersData.player1)
+                ? "active-status-online"
+                : "active-status-offline"
+            }`}
+          ></div>
           <div
             className={`name-and-score-div ${isMyTurn ? "myturn-boder" : ""}`}
           >
@@ -320,6 +349,13 @@ function OnlinePlayGround() {
           </div>
         </div>
         <div className="player2-container player-name-container">
+          <div
+            className={`active-status ${
+              activeUsers.includes(playersData.player2)
+                ? "active-status-online"
+                : "active-status-offline"
+            }`}
+          ></div>
           <div
             className={`name-and-score-div ${!isMyTurn ? "myturn-boder" : ""}`}
           >

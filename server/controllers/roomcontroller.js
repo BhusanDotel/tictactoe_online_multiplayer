@@ -3,6 +3,7 @@ const boardData = require("../models/boardModel.js");
 const createRoom = (req, res) => {
   if (req.body) {
     const { name } = req.body;
+    console.log(name);
     if (name) {
       async function createRoom() {
         const randomNumber = Math.floor(Math.random() * 9000) + 1000;
