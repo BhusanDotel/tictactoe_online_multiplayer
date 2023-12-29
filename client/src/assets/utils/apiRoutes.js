@@ -1,5 +1,6 @@
-export const host = "http://localhost:3000";
-export const myBaseURL = "http://localhost:5173";
+// export const host = "http://localhost:3000";
+export const host = "https://aalucross-be.onrender.com";
+export const myBaseURL = "https://aalucross.onrender.com";
 export const createRoomRoute = `${host}/api/createroom`;
 export const joinRoomRoute = `${host}/api/joinroom`;
 export const getRoomInfoRoute = `${host}/api/getroomInfo`;
