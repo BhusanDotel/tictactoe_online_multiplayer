@@ -399,17 +399,18 @@ function OnlinePlayGround() {
                 {!isPlayAgainRequest ? "Play Again" : "Request sent!"}
               </button>
             )}
-            {playAgainVote.length !== 0 && !playAgainVote.includes(myName) && (
-              <div className="play-again-accept-deny">
-                <p>Opponent wants to play again!</p>
-                <button className="btn-playagain" onClick={allowPlayAgain}>
-                  Allow
-                </button>
-                <button className="btn-playagain" onClick={denyPlayAgain}>
-                  Deny
-                </button>
-              </div>
-            )}
+            {(playAgainVote.length !== 0 && !playAgainVote.includes(myName)) ||
+              (playAgainVote.length === 2 && playAgainVote.includes(myName) && (
+                <div className="play-again-accept-deny">
+                  <p>Opponent wants to play again!</p>
+                  <button className="btn-playagain" onClick={allowPlayAgain}>
+                    Allow
+                  </button>
+                  <button className="btn-playagain" onClick={denyPlayAgain}>
+                    Deny
+                  </button>
+                </div>
+              ))}
           </div>
         </div>
       </main>
