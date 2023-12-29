@@ -391,26 +391,40 @@ function OnlinePlayGround() {
             </div>
           </div>
           <div className=" play-again-container">
-            {(playAgainVote.length === 0 || playAgainVote.includes(myName)) && (
-              <button
-                onClick={PlayAgain}
-                className="room-button online-play-button"
-              >
-                {!isPlayAgainRequest ? "Play Again" : "Request sent!"}
-              </button>
+            {playAgainVote.length !== 2 &&
+              (playAgainVote.length === 0 ||
+                playAgainVote.includes(myName)) && (
+                <button
+                  onClick={PlayAgain}
+                  className="room-button online-play-button"
+                >
+                  {!isPlayAgainRequest ? "Play Again" : "Request sent!"}
+                </button>
+              )}
+
+            {playAgainVote.length === 1 && !playAgainVote.includes(myName) && (
+              <div className="play-again-accept-deny">
+                <p>Opponent wants to play again!</p>
+                <button className="btn-playagain" onClick={allowPlayAgain}>
+                  Allow
+                </button>
+                <button className="btn-playagain" onClick={denyPlayAgain}>
+                  Deny
+                </button>
+              </div>
             )}
-            {(playAgainVote.length !== 0 && !playAgainVote.includes(myName)) ||
-              (playAgainVote.length === 2 && playAgainVote.includes(myName) && (
-                <div className="play-again-accept-deny">
-                  <p>Opponent wants to play again!</p>
-                  <button className="btn-playagain" onClick={allowPlayAgain}>
-                    Allow
-                  </button>
-                  <button className="btn-playagain" onClick={denyPlayAgain}>
-                    Deny
-                  </button>
-                </div>
-              ))}
+
+            {playAgainVote.length === 2 && (
+              <div className="play-again-accept-deny">
+                <p>Opponent wants to play again!</p>
+                <button className="btn-playagain" onClick={allowPlayAgain}>
+                  Allow
+                </button>
+                <button className="btn-playagain" onClick={denyPlayAgain}>
+                  Deny
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </main>
