@@ -53,7 +53,7 @@ function OnlinePlayGround() {
   const [isMyTurn, setMyTurn] = useState(false);
   const [playAgainVote, setPlayAgainVote] = useState([]);
   const [activeUsers, setActiveUsers] = React.useState([]);
-  const [isImg, setImg] = React.useState(false);
+  const [isPlayAgainRequest, setPlayAgainRequest] = React.useState(false);
   const navigate = useNavigate();
 
   const lineCoords = {
@@ -100,7 +100,6 @@ function OnlinePlayGround() {
           _cellState[32] = res.data[32];
           _cellState[33] = res.data[33];
           setCellState(_cellState);
-          setImg(true);
           if (res.data.winCoordsInitials) {
             setWon(true);
             setWinLineCoords(res.data.winCoordsInitials);
@@ -193,6 +192,10 @@ function OnlinePlayGround() {
   const PlayAgain = async () => {
     const roomcode = roomCodeIn;
     if (roomcode && name) {
+      setPlayAgainRequest(true);
+      setTimeout(() => {
+        setPlayAgainRequest(false);
+      }, 1500);
       axios
         .post(playagainRoute, {
           roomcode,
@@ -209,6 +212,7 @@ function OnlinePlayGround() {
   const allowPlayAgain = async () => {
     const roomcode = roomCodeIn;
     if (roomcode && name) {
+      setPlayAgainRequest(false);
       axios
         .post(allowPlayagainRoute, {
           roomcode,
@@ -225,6 +229,7 @@ function OnlinePlayGround() {
   const denyPlayAgain = async () => {
     const roomcode = roomCodeIn;
     if (roomcode && name) {
+      setPlayAgainRequest(false);
       axios
         .post(denyPlayagainRoute, {
           roomcode,
@@ -386,7 +391,7 @@ function OnlinePlayGround() {
                 onClick={PlayAgain}
                 className="room-button online-play-button"
               >
-                Play Again
+                {!isPlayAgainRequest ? "Play Again" : "Request sent!"}
               </button>
             )}
             {playAgainVote.length !== 0 && !playAgainVote.includes(myName) && (
