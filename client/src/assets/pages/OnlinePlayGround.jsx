@@ -24,9 +24,14 @@ function OnlinePlayGround() {
       const randomCode = Math.floor(Math.random() * 9000) + 1000;
       return randomCode.toString();
     }
-
-    name = prompt("Please enter your name");
-    localStorage.setItem("name", `${name}#${generateRandomCode()}`);
+    getName();
+    function getName() {
+      name = prompt("Please enter your name");
+      if (name === "" || name === null) {
+        getName();
+      }
+      localStorage.setItem("name", `${name}#${generateRandomCode()}`);
+    }
   }
   const { roomCodeIn } = useParams();
   const [isWon, setWon] = useState(false);

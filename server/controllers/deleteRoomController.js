@@ -10,7 +10,7 @@ const startTimer = (roomCodeIn) => {
     if (seconds < 0) {
       clearInterval(timer);
       async function deleteRoom() {
-        await boardData.deleteOne({ roomCode: roomCodeIn });
+        const del = await boardData.deleteOne({ roomCode: roomCodeIn });
       }
       deleteRoom();
       seconds = 300;
