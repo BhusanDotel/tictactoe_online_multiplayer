@@ -4,6 +4,7 @@ export const createRoomRoute = `${host}/api/createroom`;
 export const joinRoomRoute = `${host}/api/joinroom`;
 export const getRoomInfoRoute = `${host}/api/getroomInfo`;
 export const turnDecidingRoute = `${host}/api/turn`;
+export const deleteRoomRoute = `${host}/api/deleteroom`;
 export const playagainRoute = `${host}/api/playagain`;
 export const allowPlayagainRoute = `${host}/api/allowplayagain`;
 export const denyPlayagainRoute = `${host}/api/denyplayagain`;

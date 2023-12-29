@@ -10,6 +10,7 @@ const roomRoutes = require("./routes/roomRoutes");
 const turnRoutes = require("./routes/turnRoutes");
 const playAgainRoutes = require("./routes/playAgainRoutes");
 const roomInfoRoutes = require("./routes/roomInfoRoutes");
+const deleteRoomRoute = require("./routes/deleteRoomRoute");
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,6 +30,7 @@ app.use("/api", turnRoutes);
 app.use("/api", roomRoutes);
 app.use("/api", playAgainRoutes);
 app.use("/api", roomInfoRoutes);
+app.use("/api", deleteRoomRoute);
 
 const server = http.createServer(app);
 

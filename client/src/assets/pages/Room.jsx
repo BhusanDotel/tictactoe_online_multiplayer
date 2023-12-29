@@ -3,7 +3,7 @@ import axios from "axios";
 import "../styles/Room.css";
 import { host } from "../utils/apiRoutes";
 import { myBaseURL } from "../utils/apiRoutes";
-import { createRoomRoute } from "../utils/apiRoutes";
+import { createRoomRoute, deleteRoomRoute } from "../utils/apiRoutes";
 import hashCode from "../utils/hashCodeGenerator";
 import io from "socket.io-client";
 
@@ -48,10 +48,11 @@ function Room() {
         if (res.data) {
           setRoomURL(`${myBaseURL}/playonline/${res.data}`);
           localStorage.setItem("roomCode", res.data);
+          const roomCodeIn = res.data;
           setCreating(false);
+          axios.post(deleteRoomRoute, { roomCodeIn });
         }
       });
-      console.log(name);
     }
   };
 
