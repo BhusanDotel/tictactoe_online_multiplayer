@@ -134,12 +134,12 @@ function LocalPlayGround() {
         <div className="first-row rows">
           <div onClick={() => handleCellClick(1, 1)} className="one-one cells">
             <div style={{ display: cellState[11] ? "block" : "none" }}>
-              <img src={`/images/${cellState[11]}.png`} alt="" />
+              <img src={`/images/${cellState[11]}.gif`} alt="" />
             </div>
           </div>
           <div onClick={() => handleCellClick(1, 2)} className="one-two cells">
             <div style={{ display: cellState[12] ? "block" : "none" }}>
-              <img src={`/images/${cellState[12]}.png`} alt="" />
+              <img src={`/images/${cellState[12]}.gif`} alt="" />
             </div>
           </div>
           <div
@@ -147,7 +147,7 @@ function LocalPlayGround() {
             className="one-three cells"
           >
             <div style={{ display: cellState[13] ? "block" : "none" }}>
-              <img src={`/images/${cellState[13]}.png`} alt="" />
+              <img src={`/images/${cellState[13]}.gif`} alt="" />
             </div>
           </div>
         </div>
@@ -155,12 +155,12 @@ function LocalPlayGround() {
         <div className="second-row rows">
           <div onClick={() => handleCellClick(2, 1)} className="two-one cells">
             <div style={{ display: cellState[21] ? "block" : "none" }}>
-              <img src={`/images/${cellState[21]}.png`} alt="" />
+              <img src={`/images/${cellState[21]}.gif`} alt="" />
             </div>
           </div>
           <div onClick={() => handleCellClick(2, 2)} className="two-two cells">
             <div style={{ display: cellState[22] ? "block" : "none" }}>
-              <img src={`/images/${cellState[22]}.png`} alt="" />
+              <img src={`/images/${cellState[22]}.gif`} alt="" />
             </div>
           </div>
           <div
@@ -168,7 +168,7 @@ function LocalPlayGround() {
             className="two-three cells"
           >
             <div style={{ display: cellState[23] ? "block" : "none" }}>
-              <img src={`/images/${cellState[23]}.png`} alt="" />
+              <img src={`/images/${cellState[23]}.gif`} alt="" />
             </div>
           </div>
         </div>
@@ -179,7 +179,7 @@ function LocalPlayGround() {
             className="three-one cells"
           >
             <div style={{ display: cellState[31] ? "block" : "none" }}>
-              <img src={`/images/${cellState[31]}.png`} alt="" />
+              <img src={`/images/${cellState[31]}.gif`} alt="" />
             </div>
           </div>
           <div
@@ -187,7 +187,7 @@ function LocalPlayGround() {
             className="three-two cells"
           >
             <div style={{ display: cellState[32] ? "block" : "none" }}>
-              <img src={`/images/${cellState[32]}.png`} alt="" />
+              <img src={`/images/${cellState[32]}.gif`} alt="" />
             </div>
           </div>
           <div
@@ -195,7 +195,7 @@ function LocalPlayGround() {
             className="three-three cells"
           >
             <div style={{ display: cellState[33] ? "block" : "none" }}>
-              <img src={`/images/${cellState[33]}.png`} alt="" />
+              <img src={`/images/${cellState[33]}.gif`} alt="" />
             </div>
           </div>
         </div>

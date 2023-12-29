@@ -38,11 +38,22 @@ function OnlinePlayGround() {
   });
   const [trigger, setTrigger] = useState(0);
   const [winLineCoords, setWinLineCoords] = React.useState();
-  const [cellState, setCellState] = useState({});
+  const [cellState, setCellState] = useState({
+    11: null,
+    12: null,
+    13: null,
+    21: null,
+    22: null,
+    23: null,
+    31: null,
+    32: null,
+    33: null,
+  });
   const [myName, setMyname] = useState(name);
   const [isMyTurn, setMyTurn] = useState(false);
   const [playAgainVote, setPlayAgainVote] = useState([]);
   const [activeUsers, setActiveUsers] = React.useState([]);
+  const [isImg, setImg] = React.useState(false);
   const navigate = useNavigate();
 
   const lineCoords = {
@@ -89,6 +100,7 @@ function OnlinePlayGround() {
           _cellState[32] = res.data[32];
           _cellState[33] = res.data[33];
           setCellState(_cellState);
+          setImg(true);
           if (res.data.winCoordsInitials) {
             setWon(true);
             setWinLineCoords(res.data.winCoordsInitials);
@@ -155,6 +167,14 @@ function OnlinePlayGround() {
   const handleCellClick = async (a, b) => {
     const roomcode = roomCodeIn;
     if (!isWon && a && b && roomcode && name) {
+      const _a = a.toString();
+      const _b = b.toString();
+      const cellIndex = _a + _b;
+      if (cellState[cellIndex] === null) {
+        const _cellState = { ...cellState };
+        _cellState[cellIndex] = "loading-gif";
+        setCellState(_cellState);
+      }
       await axios
         .post(turnDecidingRoute, { a, b, roomcode, name })
         .then((res) => {
@@ -276,7 +296,7 @@ function OnlinePlayGround() {
                   className="one-one cells"
                 >
                   <div style={{ display: cellState[11] ? "block" : "none" }}>
-                    <img src={`/images/${cellState[11]}.png`} alt="" />
+                    <img src={`/images/${cellState[11]}.gif`} alt="" />
                   </div>
                 </div>
                 <div
@@ -284,7 +304,7 @@ function OnlinePlayGround() {
                   className="one-two cells"
                 >
                   <div style={{ display: cellState[12] ? "block" : "none" }}>
-                    <img src={`/images/${cellState[12]}.png`} alt="" />
+                    <img src={`/images/${cellState[12]}.gif`} alt="" />
                   </div>
                 </div>
                 <div
@@ -292,7 +312,7 @@ function OnlinePlayGround() {
                   className="one-three cells"
                 >
                   <div style={{ display: cellState[13] ? "block" : "none" }}>
-                    <img src={`/images/${cellState[13]}.png`} alt="" />
+                    <img src={`/images/${cellState[13]}.gif`} alt="" />
                   </div>
                 </div>
               </div>
@@ -303,7 +323,7 @@ function OnlinePlayGround() {
                   className="two-one cells"
                 >
                   <div style={{ display: cellState[21] ? "block" : "none" }}>
-                    <img src={`/images/${cellState[21]}.png`} alt="" />
+                    <img src={`/images/${cellState[21]}.gif`} alt="" />
                   </div>
                 </div>
                 <div
@@ -311,7 +331,7 @@ function OnlinePlayGround() {
                   className="two-two cells"
                 >
                   <div style={{ display: cellState[22] ? "block" : "none" }}>
-                    <img src={`/images/${cellState[22]}.png`} alt="" />
+                    <img src={`/images/${cellState[22]}.gif`} alt="" />
                   </div>
                 </div>
                 <div
@@ -319,7 +339,7 @@ function OnlinePlayGround() {
                   className="two-three cells"
                 >
                   <div style={{ display: cellState[23] ? "block" : "none" }}>
-                    <img src={`/images/${cellState[23]}.png`} alt="" />
+                    <img src={`/images/${cellState[23]}.gif`} alt="" />
                   </div>
                 </div>
               </div>
@@ -330,7 +350,7 @@ function OnlinePlayGround() {
                   className="three-one cells"
                 >
                   <div style={{ display: cellState[31] ? "block" : "none" }}>
-                    <img src={`/images/${cellState[31]}.png`} alt="" />
+                    <img src={`/images/${cellState[31]}.gif`} alt="" />
                   </div>
                 </div>
                 <div
@@ -338,7 +358,7 @@ function OnlinePlayGround() {
                   className="three-two cells"
                 >
                   <div style={{ display: cellState[32] ? "block" : "none" }}>
-                    <img src={`/images/${cellState[32]}.png`} alt="" />
+                    <img src={`/images/${cellState[32]}.gif`} alt="" />
                   </div>
                 </div>
                 <div
@@ -346,7 +366,7 @@ function OnlinePlayGround() {
                   className="three-three cells"
                 >
                   <div style={{ display: cellState[33] ? "block" : "none" }}>
-                    <img src={`/images/${cellState[33]}.png`} alt="" />
+                    <img src={`/images/${cellState[33]}.gif`} alt="" />
                   </div>
                 </div>
               </div>
