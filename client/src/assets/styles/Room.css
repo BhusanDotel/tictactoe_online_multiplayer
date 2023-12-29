@@ -41,7 +41,7 @@
   row-gap: 50px;
 }
 .room-buttons-container {
-  width: 450px;
+  width: 340px;
   display: flex;
   flex-direction: column;
   row-gap: 30px;
@@ -63,6 +63,7 @@
 }
 .room-code {
   color: white;
+  font-size: 11px;
 }
 .room-input {
   width: 300px;
