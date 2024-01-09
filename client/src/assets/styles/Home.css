@@ -36,3 +36,13 @@
   background: rgb(255, 255, 255);
   z-index: 999;
 }
+.home-social-links {
+  margin-top: 150px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  column-gap: 20px;
+}
+.social-icon {
+  cursor: pointer;
+}
