@@ -5,6 +5,7 @@ import { host } from "../utils/apiRoutes";
 import { myBaseURL } from "../utils/apiRoutes";
 import { createRoomRoute, deleteRoomRoute } from "../utils/apiRoutes";
 import hashCode from "../utils/hashCodeGenerator";
+import QRCode from "react-qr-code";
 import io from "socket.io-client";
 
 const socket = io.connect(host);
@@ -96,13 +97,32 @@ function Room() {
             </button>
             {!isCreating ? (
               rooomURL && (
-                <div className="room-url-copy-container">
-                  <p id="textToCopy" className="room-code">
-                    {rooomURL}
-                  </p>
-                  <button onClick={handleCopyClick} className="copy-btn">
-                    {copied ? "Copied!" : "Copy"}
-                  </button>
+                <div className="room-url-qr-container">
+                  <div
+                    className="qr-container"
+                    style={{
+                      width: "150px",
+                      height: "150px",
+                    }}
+                  >
+                    <QRCode
+                      size={256}
+                      style={{
+                        height: "auto",
+                        width: "100%",
+                      }}
+                      value={rooomURL}
+                      viewBox={`0 0 256 256`}
+                    />
+                  </div>
+                  <div className="room-url-copy-container">
+                    <p id="textToCopy" className="room-code">
+                      {rooomURL}
+                    </p>
+                    <button onClick={handleCopyClick} className="copy-btn">
+                      {copied ? "Copied!" : "Copy"}
+                    </button>
+                  </div>
                 </div>
               )
             ) : (
