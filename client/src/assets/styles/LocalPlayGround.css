@@ -63,3 +63,23 @@ img {
   top: 0;
   z-index: -1;
 }
+.localplayground-restart-btn-container {
+  display: flex;
+  justify-content: center;
+}
+
+.localplayground-restart-btn {
+  margin-top: 20px;
+  width: 100px;
+  height: 40px;
+  background-color: black;
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.6s;
+}
+.localplayground-restart-btn:active {
+  transform: scale(0.7);
+}

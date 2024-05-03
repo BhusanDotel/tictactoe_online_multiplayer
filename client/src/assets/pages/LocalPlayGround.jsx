@@ -5,15 +5,17 @@ import "../styles/LocalPlayGround.css";
 function LocalPlayGround() {
   const [clickCount, setClickCount] = useState(1);
   const [isOdd, setOdd] = useState(false);
-  const [matrix, setMatrix] = useState([
+
+  const initialMatrix = [
     [100, 100, 100],
     [100, 100, 100],
     [100, 100, 100],
-  ]);
+  ];
+  const [matrix, setMatrix] = useState(initialMatrix);
   const [isWon, setWon] = React.useState(false);
   const [lineCoords, setLineCoords] = React.useState("");
 
-  const [cellState, setCellState] = useState({
+  const initialCellState = {
     11: null,
     12: null,
     13: null,
@@ -23,12 +25,23 @@ function LocalPlayGround() {
     31: null,
     32: null,
     33: null,
-  });
+  };
+
+  const [cellState, setCellState] = useState(initialCellState);
 
   const handleClick = () => {
     if (clickCount < 10) {
       setClickCount(clickCount + 1);
     }
+  };
+
+  const handleReset = () => {
+    setClickCount(1);
+    setOdd(false);
+    setMatrix(initialMatrix);
+    setWon(false);
+    setLineCoords("");
+    setCellState(initialCellState);
   };
 
   useEffect(() => {
@@ -130,78 +143,99 @@ function LocalPlayGround() {
 
   return (
     <main className="main-root-container">
-      <div onClick={handleClick} className="playground-root">
-        <div className="first-row rows">
-          <div onClick={() => handleCellClick(1, 1)} className="one-one cells">
-            <div style={{ display: cellState[11] ? "block" : "none" }}>
-              <img src={`/images/${cellState[11]}.gif`} alt="" />
+      <div style={{ display: "flex", flexDirection: "column", gap: "100px" }}>
+        <div>
+          <div onClick={handleClick} className="playground-root">
+            <div className="first-row rows">
+              <div
+                onClick={() => handleCellClick(1, 1)}
+                className="one-one cells"
+              >
+                <div style={{ display: cellState[11] ? "block" : "none" }}>
+                  <img src={`/images/${cellState[11]}.gif`} alt="" />
+                </div>
+              </div>
+              <div
+                onClick={() => handleCellClick(1, 2)}
+                className="one-two cells"
+              >
+                <div style={{ display: cellState[12] ? "block" : "none" }}>
+                  <img src={`/images/${cellState[12]}.gif`} alt="" />
+                </div>
+              </div>
+              <div
+                onClick={() => handleCellClick(1, 3)}
+                className="one-three cells"
+              >
+                <div style={{ display: cellState[13] ? "block" : "none" }}>
+                  <img src={`/images/${cellState[13]}.gif`} alt="" />
+                </div>
+              </div>
             </div>
-          </div>
-          <div onClick={() => handleCellClick(1, 2)} className="one-two cells">
-            <div style={{ display: cellState[12] ? "block" : "none" }}>
-              <img src={`/images/${cellState[12]}.gif`} alt="" />
-            </div>
-          </div>
-          <div
-            onClick={() => handleCellClick(1, 3)}
-            className="one-three cells"
-          >
-            <div style={{ display: cellState[13] ? "block" : "none" }}>
-              <img src={`/images/${cellState[13]}.gif`} alt="" />
-            </div>
-          </div>
-        </div>
 
-        <div className="second-row rows">
-          <div onClick={() => handleCellClick(2, 1)} className="two-one cells">
-            <div style={{ display: cellState[21] ? "block" : "none" }}>
-              <img src={`/images/${cellState[21]}.gif`} alt="" />
+            <div className="second-row rows">
+              <div
+                onClick={() => handleCellClick(2, 1)}
+                className="two-one cells"
+              >
+                <div style={{ display: cellState[21] ? "block" : "none" }}>
+                  <img src={`/images/${cellState[21]}.gif`} alt="" />
+                </div>
+              </div>
+              <div
+                onClick={() => handleCellClick(2, 2)}
+                className="two-two cells"
+              >
+                <div style={{ display: cellState[22] ? "block" : "none" }}>
+                  <img src={`/images/${cellState[22]}.gif`} alt="" />
+                </div>
+              </div>
+              <div
+                onClick={() => handleCellClick(2, 3)}
+                className="two-three cells"
+              >
+                <div style={{ display: cellState[23] ? "block" : "none" }}>
+                  <img src={`/images/${cellState[23]}.gif`} alt="" />
+                </div>
+              </div>
             </div>
-          </div>
-          <div onClick={() => handleCellClick(2, 2)} className="two-two cells">
-            <div style={{ display: cellState[22] ? "block" : "none" }}>
-              <img src={`/images/${cellState[22]}.gif`} alt="" />
-            </div>
-          </div>
-          <div
-            onClick={() => handleCellClick(2, 3)}
-            className="two-three cells"
-          >
-            <div style={{ display: cellState[23] ? "block" : "none" }}>
-              <img src={`/images/${cellState[23]}.gif`} alt="" />
-            </div>
-          </div>
-        </div>
 
-        <div className="third-row rows">
-          <div
-            onClick={() => handleCellClick(3, 1)}
-            className="three-one cells"
-          >
-            <div style={{ display: cellState[31] ? "block" : "none" }}>
-              <img src={`/images/${cellState[31]}.gif`} alt="" />
+            <div className="third-row rows">
+              <div
+                onClick={() => handleCellClick(3, 1)}
+                className="three-one cells"
+              >
+                <div style={{ display: cellState[31] ? "block" : "none" }}>
+                  <img src={`/images/${cellState[31]}.gif`} alt="" />
+                </div>
+              </div>
+              <div
+                onClick={() => handleCellClick(3, 2)}
+                className="three-two cells"
+              >
+                <div style={{ display: cellState[32] ? "block" : "none" }}>
+                  <img src={`/images/${cellState[32]}.gif`} alt="" />
+                </div>
+              </div>
+              <div
+                onClick={() => handleCellClick(3, 3)}
+                className="three-three cells"
+              >
+                <div style={{ display: cellState[33] ? "block" : "none" }}>
+                  <img src={`/images/${cellState[33]}.gif`} alt="" />
+                </div>
+              </div>
             </div>
           </div>
-          <div
-            onClick={() => handleCellClick(3, 2)}
-            className="three-two cells"
-          >
-            <div style={{ display: cellState[32] ? "block" : "none" }}>
-              <img src={`/images/${cellState[32]}.gif`} alt="" />
-            </div>
-          </div>
-          <div
-            onClick={() => handleCellClick(3, 3)}
-            className="three-three cells"
-          >
-            <div style={{ display: cellState[33] ? "block" : "none" }}>
-              <img src={`/images/${cellState[33]}.gif`} alt="" />
-            </div>
+          <div className="line-container">
+            {isWon && <Line key={"random key"} lineCoords={lineCoords} />}
           </div>
         </div>
-      </div>
-      <div className="line-container">
-        {isWon && <Line key={"random key"} lineCoords={lineCoords} />}
+        <div className="localplayground-restart-btn-container">
+          <button className="localplayground-restart-btn" onClick={handleReset}>
+            Restart
+          </button>
+        </div>
       </div>
     </main>
   );
