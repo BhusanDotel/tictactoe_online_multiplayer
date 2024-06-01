@@ -19,22 +19,25 @@ const socket = io.connect(host);
 
 function OnlinePlayGround() {
   let name = localStorage.getItem("name");
-  if (!name) {
-    function generateRandomCode() {
-      const randomCode = Math.floor(Math.random() * 9000) + 1000;
-      return randomCode.toString();
-    }
 
-    getName();
-    function getName() {
-      const _name = prompt("Please enter your name");
-      if (_name === "" || _name === null) {
-        getName();
-      }
-      name = `${_name}#${generateRandomCode()}`;
-      localStorage.setItem("name", name);
+  const generateRandomCode = () => {
+    const randomCode = Math.floor(Math.random() * 9000) + 1000;
+    return randomCode.toString();
+  };
+
+  const getName = () => {
+    const _name = prompt("Please enter your name");
+    if (_name === "" || _name === null) {
+      getName();
     }
+    name = `${_name}#${generateRandomCode()}`;
+    localStorage.setItem("name", name);
+  };
+
+  if (!name) {
+    getName();
   }
+
   const { roomCodeIn } = useParams();
   const [isWon, setWon] = useState(false);
   const [playersData, setPlayersData] = useState({
@@ -61,6 +64,8 @@ function OnlinePlayGround() {
   const [playAgainVote, setPlayAgainVote] = useState([]);
   const [activeUsers, setActiveUsers] = React.useState([]);
   const [isPlayAgainRequest, setPlayAgainRequest] = React.useState(false);
+  const [isBlockSpam, setBlockSpam] = React.useState(false);
+  const [isBlockSpam2, setBlockSpam2] = React.useState(false);
   const navigate = useNavigate();
 
   const lineCoords = {
@@ -89,7 +94,7 @@ function OnlinePlayGround() {
     }
 
     checkRoomAvailable();
-  }, [myName]);
+  }, [myName, name, navigate, roomCodeIn]);
 
   useEffect(() => {
     const roomcode = roomCodeIn;
@@ -144,12 +149,14 @@ function OnlinePlayGround() {
     socket.on("cellState", (data) => {
       if (data) {
         setTrigger(trigger + 1);
+        setBlockSpam(false);
       }
     });
 
     socket.on("playAgain", (data) => {
       if (data) {
         setTrigger(trigger + data);
+        setBlockSpam(false);
       }
     });
   }, [trigger, myName, socket]);
@@ -171,6 +178,13 @@ function OnlinePlayGround() {
   }, [socket]);
 
   const handleCellClick = async (a, b) => {
+    if (!isMyTurn) {
+      return;
+    }
+    setBlockSpam(true);
+    if (isBlockSpam) {
+      return;
+    }
     const roomcode = roomCodeIn;
     if (!isWon && a && b && roomcode && name) {
       const _a = a.toString();
@@ -188,6 +202,7 @@ function OnlinePlayGround() {
             if (res.data === "your turn registered") {
               setTrigger(trigger + 1);
             }
+            setBlockSpam(false);
           }
         });
       await socket.emit("cellState", a.toString() + b.toString());
@@ -197,6 +212,10 @@ function OnlinePlayGround() {
   };
 
   const PlayAgain = async () => {
+    setBlockSpam2(true);
+    if (isBlockSpam2) {
+      return;
+    }
     const roomcode = roomCodeIn;
     if (roomcode && name) {
       setPlayAgainRequest(true);
@@ -212,6 +231,7 @@ function OnlinePlayGround() {
           if (res.data) {
             await socket.emit("playAgain", trigger);
           }
+          setBlockSpam2(false);
         });
     }
   };
